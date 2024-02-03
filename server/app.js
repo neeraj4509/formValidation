@@ -51,7 +51,11 @@ app.post('/submit', async (req, res) => {
 });
 
 app.get('/submissions', (req, res) => {
-    res.status(200).json(submissions);
+    const userEmail = req.query.email; 
+
+    const userSubmissions = submissions.filter(submission => submission.email === userEmail);
+
+    res.status(200).json(userSubmissions);
 });
 
 app.listen(PORT, () => {

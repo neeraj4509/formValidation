@@ -1,24 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/SubmissionsComponent.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,useLocation} from 'react-router-dom';
 
 const SubmissionsComponent = () => {
     const [submissions, setSubmissions] = useState([]);
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const userEmail = searchParams.get('email');
+
         const fetchSubmissions = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/submissions');
+                const response = await axios.get(`https://formvalidation-hwdu.onrender.com/submissions?email=${encodeURIComponent(userEmail)}`);
                 setSubmissions(response.data);
             } catch (error) {
                 console.error('Failed to fetch submissions:', error);
             }
         };
 
-        fetchSubmissions();
-    }, []);
+        if (userEmail) {
+            fetchSubmissions();
+        } else {
+            
+            console.log("Email parameter is missing in the URL.");
+        }
+    }, [location]);
 
     function redirectAccount(){
         navigate('/');

@@ -75,8 +75,9 @@ const FormComponent = () => {
           };
 
         try {
-            await axios.post('http://localhost:3001/submit', submissionData);
-            navigate('/submissions'); 
+            await axios.post('https://formvalidation-hwdu.onrender.com/submit', submissionData);
+            localStorage.setItem('userEmail', formData.email);
+            navigate(`/submissions?email=${encodeURIComponent(formData.email)}`);
         } catch (error) {
             if (error.response && error.response.data && error.response.data.message) {
                 alert(error.response.data.message);
